@@ -1,0 +1,60 @@
+local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/7yhx/kwargs_Ui_Library/main/source.lua"))()
+
+local UI = Lib:Create{
+   Theme = "Dark", -- or any other theme
+   Size = UDim2.new(0, 555, 0, 400) -- default
+}
+
+local Main = UI:Tab{
+   Name = "Inicio"
+}
+
+local Divider = Main:Divider{
+   Name = "Inicio shit"
+}
+
+local QuitDivider = Main:Divider{
+   Name = "Sair"
+}
+
+
+
+-- ESP Script para Arsenal com ativação/desativação usando a tecla Z
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local ESPEnabled = true
+
+local function isEnemy(player)
+    return player.TeamColor ~= LocalPlayer.TeamColor
+end
+
+local function createESP(player)
+    local esp = Instance.new("BoxHandleAdornment")
+    esp.Size = player.Character.HumanoidRootPart.Size * Vector3.new(1.2, 1.2, 1.2)
+    esp.Color3 = isEnemy(player) and Color3.new(1, 0, 0) or Color3.new(0, 1, 0)
+    esp.Transparency = 0.5
+    esp.Adornee = player.Character.HumanoidRootPart
+    esp.Parent = player.Character
+    esp.Visible = ESPEnabled
+end
+
+Players.PlayerAdded:Connect(function(player)
+    createESP(player)
+end)
+
+for _, player in pairs(Players:GetPlayers()) do
+    createESP(player)
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.Z then
+        ESPEnabled = not ESPEnabled
+        for _, player in pairs(Players:GetPlayers()) do
+            local esp = player.Character:FindFirstChild("BoxHandleAdornment")
+            if esp then
+                esp.Visible = ESPEnabled
+            end
+        end
+    end
+end)
