@@ -1,60 +1,99 @@
-local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/7yhx/kwargs_Ui_Library/main/source.lua"))()
+-- Funções vazias para o jogo "Arsenal" no Roblox
 
-local UI = Lib:Create{
-   Theme = "Dark", -- or any other theme
-   Size = UDim2.new(0, 555, 0, 400) -- default
-}
-
-local Main = UI:Tab{
-   Name = "Inicio"
-}
-
-local Divider = Main:Divider{
-   Name = "Inicio shit"
-}
-
-local QuitDivider = Main:Divider{
-   Name = "Sair"
-}
-
-
-
--- ESP Script para Arsenal com ativação/desativação usando a tecla Z
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = Players.LocalPlayer
-local ESPEnabled = true
-
-local function isEnemy(player)
-    return player.TeamColor ~= LocalPlayer.TeamColor
+-- Aimbot (Assistente de mira)
+local function aimbot()
+    local function aimbot()
+        local player = game.Players.LocalPlayer
+        local enemies = game.Workspace:FindPartsInRegion3WithIgnoreList(
+            player.Character.HumanoidRootPart.Position,
+            Vector3.new(50, 50, 50),
+            {player.Character}
+        )
+    
+        local closestEnemy, closestDistance = nil, math.huge
+        for _, enemy in pairs(enemies) do
+            local distance = (enemy.Position - player.Character.HumanoidRootPart.Position).Magnitude
+            if distance < closestDistance then
+                closestEnemy, closestDistance = enemy, distance
+            end
+        end
+    
+        if closestEnemy then
+            local lookVector = (closestEnemy.Position - player.Character.HumanoidRootPart.Position).Unit
+            player.Character.HumanoidRootPart.CFrame = CFrame.lookAt(player.Character.HumanoidRootPart.Position, player.Character.HumanoidRootPart.Position + lookVector)
+        end
+    end
+    
 end
 
-local function createESP(player)
-    local esp = Instance.new("BoxHandleAdornment")
-    esp.Size = player.Character.HumanoidRootPart.Size * Vector3.new(1.2, 1.2, 1.2)
-    esp.Color3 = isEnemy(player) and Color3.new(1, 0, 0) or Color3.new(0, 1, 0)
-    esp.Transparency = 0.5
-    esp.Adornee = player.Character.HumanoidRootPart
-    esp.Parent = player.Character
-    esp.Visible = ESPEnabled
-end
-
-Players.PlayerAdded:Connect(function(player)
-    createESP(player)
-end)
-
-for _, player in pairs(Players:GetPlayers()) do
-    createESP(player)
-end
-
-UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.Z then
-        ESPEnabled = not ESPEnabled
-        for _, player in pairs(Players:GetPlayers()) do
-            local esp = player.Character:FindFirstChild("BoxHandleAdornment")
-            if esp then
-                esp.Visible = ESPEnabled
+-- Wallhack (Visão através das paredes)
+local function wallhack()
+    -local function wallhack()
+        local player = game.Players.LocalPlayer
+        local enemies = game.Workspace:FindPartsInRegion3WithIgnoreList(
+            player.Character.HumanoidRootPart.Position,
+            Vector3.new(50, 50, 50),
+            {player.Character}
+        )
+    
+        for _, enemy in pairs(enemies) do
+            local ray = Ray.new(player.Character.HumanoidRootPart.Position, enemy.Position - player.Character.HumanoidRootPart.Position)
+            local hitPart, _ = game.Workspace:FindPartOnRayWithIgnoreList(ray, {player.Character})
+            if hitPart and hitPart:IsA("BasePart") then
+                -- Ajuste a visibilidade do inimigo (por exemplo, tornando-o translúcido)
             end
         end
     end
-end)
+    
+end
+
+-- ESP (Extra Sensory Perception)
+local function showESP(player)
+    local function showESP(player)
+        local billboard = Instance.new("BillboardGui")
+        billboard.Adornee = player.Character.Head
+        billboard.Size = UDim2.new(0, 100, 0, 20)
+        billboard.StudsOffset = Vector3.new(0, 2, 0)
+        billboard.Parent = player.Character.Head
+    
+        local label = Instance.new("TextLabel")
+        label.Text = player.Name
+        label.Parent = billboard
+    end
+    
+end
+
+-- No Recoil/No Spread (Sem recuo/dispersão)
+local function noRecoil()
+    -- Implemente a lógica para eliminar o recuo e a dispersão das armas
+end
+
+-- Infinite Ammo (Munição infinita)
+local function infiniteAmmo()
+    -- Implemente a lógica para manter a munição sempre cheia
+end
+
+-- God Mode (Modo Deus)
+local function enableGodMode()
+    -- Implemente a lógica para tornar o jogador invulnerável
+end
+
+-- Teleportation (Teletransporte)
+local function teleport(destination)
+    -- Implemente a lógica para teletransportar o jogador para diferentes locais
+end
+
+-- Auto-Farm (Coleta automática de pontos)
+local function autoFarm()
+    -- Implemente a lógica para automatizar a coleta de pontos e tarefas
+end
+
+-- Exemplo de uso:
+aimbot()
+wallhack()
+showESP(game.Players.LocalPlayer)
+noRecoil()
+infiniteAmmo()
+enableGodMode()
+teleport(Vector3.new(0, 10, 0))
+autoFarm()
